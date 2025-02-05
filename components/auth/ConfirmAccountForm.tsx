@@ -1,23 +1,24 @@
 "use client"
 import { ConfirmAccount } from '@/actions/confirm-account-action'
 import { PinInput, PinInputField } from '@chakra-ui/pin-input'
+import { stat } from 'fs'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useFormState } from 'react-dom'
 import { Bounce, toast } from 'react-toastify'
 export default function ConfirmAccountForm() {
     const router = useRouter()
-    const [isComplete, setIscomplete] = useState(false)
+    const [isComplete, setIscomplete] = useState(true)
     const [token, setToken] = useState("")
     const confirmAccountWithToken = ConfirmAccount.bind(null, token) // enviar el token al use server
     const [state, dispatch] = useFormState(confirmAccountWithToken, {
         error: [],
         success: ""
     })
-
     useEffect(() => {
-        dispatch()
-
+        if (token.length === 6) { // Asegurarse de que el token está completo antes de despachar
+            dispatch()
+        }
     }, [isComplete])
 
     const onWrite = (data: string) => {
@@ -32,7 +33,7 @@ export default function ConfirmAccountForm() {
             toast.success(state.success, {onClose: ()=>{
                 router.push('/auth/login')
             }})
-        } else {
+        } if(state.error) {
             state.error.forEach(n =>{
                 toast.error(n)
             })

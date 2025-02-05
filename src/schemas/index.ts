@@ -31,5 +31,5 @@ export const UserSchema = z.object({
 export type User = z.infer<typeof UserSchema>
 
 export const ForgotSchema = z.object({
-    email: z.string().email('Email no válido')
+    email: z.string().min(1,{message:'Ingrese un Email'}).email('Email no válido')
 })

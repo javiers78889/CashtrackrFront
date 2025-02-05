@@ -1,8 +1,10 @@
 "use client"
 
 import { forgotPassword } from "@/actions/forgot-password-action"
+import { stat } from "fs"
 import { useEffect, useRef } from "react"
 import { useFormState } from "react-dom"
+import { toast } from "react-toastify"
 
 export default function ForgotPasswordForm() {
     const ref = useRef(null)
@@ -12,7 +14,16 @@ export default function ForgotPasswordForm() {
     })
 
     useEffect(() => { //aquí van los mensajes
+        if (state.success) {
+            toast.success(state.success)
+        }
+        if (state.errors) {
+            state.errors.map(n =>
 
+                toast.error(n)
+
+            )
+        }
     }, [state])
     return (
         <form
