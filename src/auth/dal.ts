@@ -1,12 +1,12 @@
 import "server-only"
-import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import { UserSchema } from "../schemas"
 import { cache } from "react"
+import { getToken } from "./token"
 
 
 export const verifySession = cache(async () => {
-    const jwt = cookies().get('jwt')?.value
+    const jwt = getToken()
 
     if (!jwt) {
         redirect('/auth/login')

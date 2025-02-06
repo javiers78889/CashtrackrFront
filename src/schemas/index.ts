@@ -40,3 +40,23 @@ export const NewPasswordSchema = z.object({
     password: z.string().min(8, { message: 'El password debe tener minimo 8 caracteres' }),
     password_confirmation: z.string().min(8, { message: 'El password debe tener minimo 8 caracteres' })
 }).refine((data) => data.password === data.password_confirmation, { message: 'Los password no coinciden' })
+
+
+//budgets schemas
+
+
+export const CreateBugetSchema = z.object({
+    name: z.string().min(1,{message:'Introduzca un nombre mas largo'}),
+    amount: z.coerce.number({message:'El presupuesto debe ser numérico'}).min(1,{message:'Monto no válido'})
+})
+
+export const BudgetAPIResponseSchema = z.object({
+    id: z.number(),
+    name: z.string(),
+    amount: z.string(),
+    userId: z.number(),
+    createdAt: z.string(),
+    updatedAt: z.string()
+})
+
+export const BudgetsAPIResponseSchema= z.array(BudgetAPIResponseSchema)
