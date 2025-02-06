@@ -16,6 +16,7 @@ export const ErrorResponseSchema = z.object({
 })
 
 export const ConfirmAccountSchema = z.string().min(6, { message: 'Token no valido, muy corto' }).max(6, { message: 'Token no valido' })
+export const ValidateTokenSchema = z.string().min(6, { message: 'Token no valido, muy corto' }).max(6, { message: 'Token no valido' })
 
 export const LoginSchema = z.object({
     email: z.string().min(1, { message: 'El email es Obligatorio para iniciar sesion' }).email({ message: 'No es un formato válido para email' }),
@@ -31,5 +32,11 @@ export const UserSchema = z.object({
 export type User = z.infer<typeof UserSchema>
 
 export const ForgotSchema = z.object({
-    email: z.string().min(1,{message:'Ingrese un Email'}).email('Email no válido')
+    email: z.string().min(1, { message: 'Ingrese un Email' }).email('Email no válido')
 })
+
+
+export const NewPasswordSchema = z.object({
+    password: z.string().min(8, { message: 'El password debe tener minimo 8 caracteres' }),
+    password_confirmation: z.string().min(8, { message: 'El password debe tener minimo 8 caracteres' })
+}).refine((data) => data.password === data.password_confirmation, { message: 'Los password no coinciden' })

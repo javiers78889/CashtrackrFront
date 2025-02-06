@@ -2,6 +2,8 @@
 
 export default function Home() {
   return (
-    <h1>Hola mundo</h1>
+    <div className="bg-purple-600 min-h-screen">
+      <h1>hola</h1>
+    </div>
   );
 }
