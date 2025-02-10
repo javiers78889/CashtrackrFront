@@ -8,6 +8,9 @@ export const getBudget =    cache( async ({ id }: { id: number }) => {
     const req = await fetch(url, {
         headers: {
             'authorization': `Bearer ${getToken()}`
+        },
+        next:{
+            tags: ['presupuestos']
         }
     })
     const json = await req.json()

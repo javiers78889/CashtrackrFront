@@ -1,5 +1,6 @@
 
 import BudgetMenu from "@/components/Budget/BudgetMenu"
+import DeleteBudgetModal from "@/components/Budget/DeleteBudgetModal"
 import { getToken } from "@/src/auth/token"
 import { BudgetsAPIResponseSchema } from "@/src/schemas"
 import { formatCurrency, formatDate } from "@/src/utils"
@@ -31,9 +32,10 @@ const getBudgets = async () => {
 
 }
 
+
 export default async function pageAdmin() {
 
-
+  
     const datos = await getBudgets()
 
 
@@ -57,7 +59,8 @@ export default async function pageAdmin() {
 
 
             {datos.length ? (
-
+                <>
+                <DeleteBudgetModal />
                 <ul role="list" className="divide-y divide-gray-300 border shadow-lg mt-10 ">
                     {datos.map((budget) => (
                         <li key={budget.id} className="flex justify-between gap-x-6 p-5 ">
@@ -83,6 +86,7 @@ export default async function pageAdmin() {
                         </li>
                     ))}
                 </ul>
+                </>
             ) : (
 
                 <p className="text-center py-20">No hay presupuestos registrados. <Link className="font-bold" href={'/admin/budget/new'}>Crea uno</Link></p>

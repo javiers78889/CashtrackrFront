@@ -46,8 +46,8 @@ export const NewPasswordSchema = z.object({
 
 
 export const CreateBugetSchema = z.object({
-    name: z.string().min(1,{message:'Introduzca un nombre mas largo'}),
-    amount: z.coerce.number({message:'El presupuesto debe ser numérico'}).min(1,{message:'Monto no válido'})
+    name: z.string().min(1, { message: 'Introduzca un nombre mas largo' }),
+    amount: z.coerce.number({ message: 'El presupuesto debe ser numérico' }).min(1, { message: 'Monto no válido' })
 })
 
 export const BudgetAPIResponseSchema = z.object({
@@ -59,6 +59,9 @@ export const BudgetAPIResponseSchema = z.object({
     updatedAt: z.string()
 })
 
-export const BudgetsAPIResponseSchema= z.array(BudgetAPIResponseSchema)
+export const BudgetsAPIResponseSchema = z.array(BudgetAPIResponseSchema)
 
-export type Budget= z.infer<typeof BudgetAPIResponseSchema>
+export type Budget = z.infer<typeof BudgetAPIResponseSchema>
+
+export const PasswordValidation = z.string().min(1, { message: 'Password no valido' })
+

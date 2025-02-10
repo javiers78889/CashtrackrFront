@@ -2,6 +2,7 @@
 
 import { getToken } from "@/src/auth/token"
 import { CreateBugetSchema, ErrorResponseSchema, SuccessSchema } from "@/src/schemas"
+import { revalidatePath } from "next/cache"
 import { cookies } from "next/headers"
 
 type TBudget = {
@@ -11,7 +12,7 @@ type TBudget = {
 
 export const createBudget = async (prevState: TBudget, formData: FormData) => {
     const url = `${process.env.API_URL}/budgets`
-    const token =getToken()
+    const token = getToken()
     console.log(Number(formData.get('amount')))
     const Datos = {
         name: formData.get('name'),
@@ -49,7 +50,7 @@ export const createBudget = async (prevState: TBudget, formData: FormData) => {
 
 
     const correcto = SuccessSchema.parse(json)
-
+    revalidatePath('/admin')
     return {
         success: correcto,
         errors: []
