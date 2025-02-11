@@ -58,6 +58,33 @@ export const BudgetAPIResponseSchema = z.object({
     createdAt: z.string(),
     updatedAt: z.string()
 })
+export const ExpsenseSchema = z.object({
+    id: z.number().min(1, { message: 'id no válido' }),
+    name: z.string().min(1, { message: 'name no válido' }),
+    amount: z.coerce.number({ message: 'el monto debe ser numérico' }).min(1, { message: 'monto no válido' }),
+    createdAt: z.string(),
+    updatedAt: z.string(),
+    budgetId: z.number().min(1, { message: 'id no válido' })
+})
+export type Expenses = z.infer<typeof ExpsenseSchema>
+
+
+export const ExpenseAPIResponseSchema = z.object({
+    id: z.number(),
+    name: z.string(),
+    amount: z.string(),
+    userId: z.number(),
+    expenses: z.array(z.object({
+        id: z.number().min(1, { message: 'id no válido' }),
+        name: z.string().min(1, { message: 'name no válido' }),
+        amount: z.coerce.number({ message: 'el monto debe ser numérico' }).min(1, { message: 'monto no válido' }),
+        createdAt: z.string(),
+        updatedAt: z.string(),
+        budgetId: z.number().min(1, { message: 'id no válido' })
+    }))
+})
+
+export type Expense = z.infer<typeof ExpenseAPIResponseSchema>
 
 export const BudgetsAPIResponseSchema = z.array(BudgetAPIResponseSchema)
 

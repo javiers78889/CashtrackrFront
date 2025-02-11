@@ -1,6 +1,6 @@
 "use client"
 import { Fragment } from 'react';
-import { useRouter, useSearchParams, usePathname } from 'next/navigation';
+import { useRouter, useSearchParams, usePathname, useParams } from 'next/navigation';
 import { Dialog, DialogPanel, Transition, TransitionChild } from '@headlessui/react';
 import AddExpenseForm from '../expenses/AddExpenseForm';
 import EditExpenseForm from '../expenses/EditExpenseForm';
@@ -19,7 +19,7 @@ export default function ModalContainer() {
     const router = useRouter()
     const pathname = usePathname()
     const searchParams = useSearchParams()
-
+    const params = useParams()
     const showModal: boolean = searchParams.get('showModal') === 'true'
 
     const addExpense: boolean = searchParams.get('addExpense') === 'true'
@@ -28,6 +28,10 @@ export default function ModalContainer() {
 
 
     const show = showModal || false
+
+    const editExpenseId = searchParams.get('editExpenseId') || false
+
+    const BudgetId = params.id
 
     const closeModal = () => {
         const hideModal = new URLSearchParams(searchParams.toString())

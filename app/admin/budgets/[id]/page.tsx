@@ -1,10 +1,11 @@
 import AddExpenseButton from '@/components/expenses/AddExpenseButton'
+import ExpenseMenu from '@/components/expenses/ExpenseMenu'
 import ModalContainer from '@/components/ui/ModalContainer'
 import { getToken } from '@/src/auth/token'
-import { BudgetsAPIResponseSchema } from '@/src/schemas'
+import { ExpenseAPIResponseSchema } from '@/src/schemas'
 import { getBudget } from '@/src/services'
+import { formatCurrency, formatDate } from '@/src/utils'
 import { Metadata } from 'next'
-import { revalidateTag } from 'next/cache'
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher'
 import React from 'react'
 
@@ -25,13 +26,14 @@ const getBudgets = async (id: number) => {
     const req = await fetch(url, {
         headers: {
             'authorization': `Bearer ${token}`
-        }
-    })
+        },
+        next: { tags: ['expenses'] } // Debe ir dentro del objeto de configuración
+    });
+
 
 
     const json = await req.json()
-    console.log(json)
-    const validar = BudgetsAPIResponseSchema.parse([json])
+    const validar = ExpenseAPIResponseSchema.parse(json)
     return validar
 
 }
@@ -44,15 +46,34 @@ export default async function BudgetsDetailsPage({ params }: { params: Params })
 
     return (
         <>
-        <div className='flex justify-between items-center'>
-            <div>
-                <h1 className="font-black text-4xl text-purple-950">{budget[0].name}</h1>
-                <p className="text-xl font-bold">Administra tus {''} <span className="text-amber-500">gastos</span></p>
+            <div className='flex justify-between items-center'>
+                <div>
+                    <h1 className="font-black text-4xl text-purple-950">{budget.name} {formatCurrency(+budget.amount)}</h1>
+                    <p className="text-xl font-bold">Administra tus {''} <span className="text-amber-500">gastos</span></p>
+                </div>
+                <AddExpenseButton />
             </div>
-            <AddExpenseButton />
-        </div>
-
-        <ModalContainer/>
+            <ul role="list" className="divide-y divide-gray-300 border shadow-lg mt-10 ">
+                {!budget.expenses.length ? (<p className='text-center py-5'>No hay gastos</p>) : budget.expenses.map((expense) => (
+                    <li key={expense.id} className="flex justify-between gap-x-6 p-5">
+                        <div className="flex min-w-0 gap-x-4">
+                            <div className="min-w-0 flex-auto space-y-2">
+                                <p className="text-2xl font-semibold text-gray-900">
+                                    {expense.name}
+                                </p>
+                                <p className="text-xl font-bold text-amber-500">
+                                    {formatCurrency(expense.amount)}
+                                </p>
+                                <p className='text-gray-500  text-sm'>
+                                    {formatDate(expense.updatedAt)}
+                                </p>
+                            </div>
+                        </div>
+                        <ExpenseMenu expenseId={expense.id} />
+                    </li>
+                ))}
+            </ul>
+            <ModalContainer />
         </>
     )
 }

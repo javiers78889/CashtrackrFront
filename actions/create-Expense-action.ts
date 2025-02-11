@@ -2,6 +2,7 @@
 
 import { getToken } from "@/src/auth/token"
 import { CreateBugetSchema, ErrorResponseSchema, SuccessSchema } from "@/src/schemas"
+import { revalidatePath } from "next/cache"
 
 type TExpense = {
     success: string,
@@ -53,8 +54,7 @@ export const CreateExpense = async (id: number, prevState: TExpense, formData: F
         }
     }
 
-    console.log(json)
-
+    revalidatePath('expenses')
     const success = SuccessSchema.parse(json)
 
     return {

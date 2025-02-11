@@ -1,5 +1,6 @@
+import { Expenses } from "@/src/schemas";
 
-export default function ExpenseForm() {
+export default function ExpenseForm({datos}:{datos?:Expenses}) {
     return (
         <>
             <div className="mb-5">
@@ -12,6 +13,7 @@ export default function ExpenseForm() {
                     type="text"
                     placeholder="Nombre del Gasto"
                     name="name"
+                    defaultValue={datos?.name || ''}
                 />
             </div>
 
@@ -25,6 +27,7 @@ export default function ExpenseForm() {
                     type="number"
                     placeholder="Cantidad Gasto"
                     name="amount"
+                    defaultValue={datos?.amount || ''}
                 />
             </div>
         </>
