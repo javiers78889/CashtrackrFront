@@ -13,8 +13,12 @@ export async function GET(request: Request, { params }: { params: { budgetId: st
     })
 
     const json = await req.json()
+    console.log(json)
 
     if (!req.ok) {
         return Response.json(json.error)
-    } return Response.json(json)
+        
+    } 
+    
+    return Response.json(json)
 }
