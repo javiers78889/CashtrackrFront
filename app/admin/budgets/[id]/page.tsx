@@ -1,5 +1,7 @@
+import ProgressBar from '@/components/Budget/ProgressBar'
 import AddExpenseButton from '@/components/expenses/AddExpenseButton'
 import ExpenseMenu from '@/components/expenses/ExpenseMenu'
+import Amount from '@/components/ui/Amount'
 import ModalContainer from '@/components/ui/ModalContainer'
 import { getToken } from '@/src/auth/token'
 import { ExpenseAPIResponseSchema } from '@/src/schemas'
@@ -42,6 +44,10 @@ export default async function BudgetsDetailsPage({ params }: { params: Params })
     const { id } = params
 
     const budget = await getBudgets(+id)
+    const totalSpent = budget.expenses.reduce((total, expense) => +expense.amount + total, 0)
+    const Disponible = +budget.amount - totalSpent
+
+    const porcentaje = ((totalSpent / +budget.amount) * 100).toFixed(2)
 
 
     return (
@@ -56,11 +62,26 @@ export default async function BudgetsDetailsPage({ params }: { params: Params })
                 </div>
                 <AddExpenseButton />
             </div>
-            <div>
-                <div>Grafica</div>
-                <div>Cantidades</div>
-            </div>
+            <div className='grid grid-flow-cols-1 md:grid-cols-2 mt-10'>
+                <ProgressBar porcentaje={+porcentaje} />
+                <div className='flex flex-col gap-5 justify-center items-center md:justify-start'>
 
+                    <Amount
+                        label='Presupuesto'
+                        amount={+budget.amount}
+                    />
+                    <Amount
+                        label='Disponible'
+                        amount={Disponible}
+                    />
+                    <Amount
+                        label='Gastado'
+                        amount={totalSpent}
+                    />
+
+
+                </div>
+            </div>
 
             <ul role="list" className="divide-y divide-gray-300 border shadow-lg mt-10 ">
                 {!budget.expenses.length ? (<p className='text-center py-5'>No hay gastos</p>) : budget.expenses.map((expense) => (
