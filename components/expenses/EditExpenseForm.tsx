@@ -2,19 +2,45 @@
 import { DialogTitle } from '@headlessui/react'
 import React, { useEffect, useState } from 'react'
 import ExpenseForm from './ExpenseForm'
-import { useParams, useSearchParams } from 'next/navigation'
+import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { Expenses } from '@/src/schemas'
+import { useFormState } from 'react-dom'
+import { editExpense } from '@/actions/edit-expense-action'
+import { stat } from 'fs'
+import { toast } from 'react-toastify'
 
 export default function EditExpenseForm() {
   const { id } = useParams()
+  const router= useRouter()
   const searchparam = useSearchParams()
-  const [datos, setDatos] = useState({} as Expenses)
+  const pathName= usePathname()
+  const [datos, setDatos] = useState<Expenses>()
   const editExpenseId = searchparam.get('editExpenseId')
+
+  const parametros = editExpense.bind(null,+id, +editExpenseId!)
+  const [state, dispatch] = useFormState(parametros, {
+    success: '',
+    errors: []
+  })
   useEffect(() => {
     const url = `${process.env.NEXT_PUBLIC_URL}/admin/api/budgets/${id}/expenses/${editExpenseId}`
     fetch(url).then(res => res.json()).then(data => setDatos(data))
 
   }, [])
+  useEffect(() => {
+    if(state.success){
+      toast.success(state.success)
+      router.replace(pathName)
+      console.log(pathName)
+      
+    }
+
+    if(state.errors){
+      state.errors.map(errores=>{
+        toast.error(errores)
+      })
+    }
+  }, [state])
 
   return (
     <>
@@ -29,7 +55,7 @@ export default function EditExpenseForm() {
         <span className="text-amber-500">gasto</span>
       </p>
       <form
-        action={() => { }}
+        action={dispatch}
         className="bg-gray-100 shadow-lg rounded-lg p-10 mt-10 border"
         noValidate
       >

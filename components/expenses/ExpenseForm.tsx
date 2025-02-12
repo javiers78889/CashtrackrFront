@@ -1,6 +1,10 @@
 import { Expenses } from "@/src/schemas";
 
-export default function ExpenseForm({datos}:{datos?:Expenses}) {
+type Gastos = {
+    datos?: Expenses
+}
+
+export default function ExpenseForm({ datos }: Gastos) {
     return (
         <>
             <div className="mb-5">
