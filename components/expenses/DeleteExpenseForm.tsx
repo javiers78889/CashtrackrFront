@@ -6,6 +6,7 @@ import { useFormState } from "react-dom";
 import { deleteExpense } from "@/actions/delete-expense-action";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
+import exp from "constants";
 
 
 export default function DeleteExpenseForm() {
@@ -39,6 +40,13 @@ export default function DeleteExpenseForm() {
       })
     }
   }, [state])
+
+
+  useEffect(()=>{
+    if(!Number.isInteger(+budget) ||!Number.isInteger(expense)){
+      closeModal()
+    }
+  },[])
 
   return (
     <>
