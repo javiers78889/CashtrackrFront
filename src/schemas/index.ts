@@ -29,6 +29,11 @@ export const UserSchema = z.object({
     email: z.string().email()
 })
 
+export const ChangeUserSchema= z.object({
+    name: z.string(),
+    email: z.string().email()
+})
+
 export type User = z.infer<typeof UserSchema>
 
 export const ForgotSchema = z.object({
