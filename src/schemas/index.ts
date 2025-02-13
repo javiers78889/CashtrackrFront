@@ -92,3 +92,9 @@ export type Budget = z.infer<typeof BudgetAPIResponseSchema>
 
 export const PasswordValidation = z.string().min(1, { message: 'Password no valido' })
 
+export const ChangeUserPasswordSchema = z.object({
+    current_password: z.string(),
+    password: z.string().min(8, { message: 'El password debe tener minimo 8 caracteres' }),
+    password_confirmation: z.string().min(8, { message: 'El password debe tener minimo 8 caracteres' })
+}).refine((data) => data.password === data.password_confirmation, { message: 'Los password no coinciden' })
+.refine((data) => data.password !== data.current_password, { message: 'El nuevo password debe ser diferente al anterior' })

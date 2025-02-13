@@ -19,6 +19,8 @@ export default function LoginForm() {
         if (!state.success) {
             const errores = state.error.map(errores => {
 
+             
+
                return toast.error(errores)
 
 
@@ -26,6 +28,7 @@ export default function LoginForm() {
         }else{
             
             toast.success('validado', { onClose: () => { router.push('/admin') } })
+            ref.current?.reset()
         }
 
     }, [state])
